@@ -12,12 +12,12 @@
 typedef unsigned long long int big_counter;
 
 const int WARP_SIZE = 32;
-const int WARPS_PER_BLOCK = 2;
+const int WARPS_PER_BLOCK = 6;
 const int THREADS_PER_BLOCK = WARPS_PER_BLOCK * WARP_SIZE;
 
 const int NUM_BLOCKS = 2560; // Number of CUDA cores on my GPU (RTX 1000 Ada)
 
-const big_counter ITERATIONS_PER_THREAD = 100000;
+const big_counter ITERATIONS_PER_THREAD = 1000;
 
 __global__ void runMonteCarlo(big_counter* total_count)
 {	
@@ -51,11 +51,15 @@ __global__ void runMonteCarlo(big_counter* total_count)
 		__syncthreads();
 	}
 
-	total_count[blockIdx.x] = 0;
-
-	for (size_t i = 0; i < THREADS_PER_BLOCK; i++)
+	// Have this done by only the first thread only
+	if (threadIdx.x == 0)
 	{
-		total_count[blockIdx.x] += current_block_counts[i];
+		total_count[blockIdx.x] = 0;
+
+		for (size_t i = 0; i < THREADS_PER_BLOCK; i++)
+		{
+			total_count[blockIdx.x] += current_block_counts[i];
+		}
 	}
 
 }
