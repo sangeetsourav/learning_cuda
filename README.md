@@ -1,7 +1,6 @@
 ## My Journery with CUDA
 
 This repository contains small CUDA programs and experiments I built while learning GPU programming.
-Currently, it includes a simple Monte Carlo simulation implemented using the CUDA Runtime API.
 
 🚀 Goal
 
@@ -9,7 +8,9 @@ To explore the CUDA programming model, practice writing parallel algorithms, and
 
 📦 Contents
 
-- monte_carlo_pi/ — Estimate π using parallel random sampling on the GPU.
+- monte_carlo_pi/ — Estimate π using parallel random sampling on the GPU. It uses the **CUDA Runtime API** with **unified memory**.
+  
+  ![image](https://github.com/user-attachments/assets/62748ef0-4a81-4a18-b6c3-5559ff6387c4)
 
 🛠 Requirements
 
