@@ -12,12 +12,12 @@
 typedef unsigned long long int big_counter;
 
 const int WARP_SIZE = 32;
-const int WARPS_PER_BLOCK = 6;
+const int WARPS_PER_BLOCK = 2;
 const int THREADS_PER_BLOCK = WARPS_PER_BLOCK * WARP_SIZE;
 
 const int NUM_BLOCKS = 2560; // Number of CUDA cores on my GPU (RTX 1000 Ada)
 
-const big_counter ITERATIONS_PER_THREAD = 1000;
+const big_counter ITERATIONS_PER_THREAD = 10000;
 
 __global__ void runMonteCarlo(big_counter* total_count)
 {	
@@ -70,7 +70,7 @@ int main()
 	std::cout << "Running on " << NUM_BLOCKS << " cores, with 1 thread-block per core and " << THREADS_PER_BLOCK << " threads per block\n";
 	std::cout << "\tTotal threads = " << NUM_BLOCKS * THREADS_PER_BLOCK << "\n";
 	std::cout << "\tIterations per thread = " << ITERATIONS_PER_THREAD << "\n";
-	std::cout << "\tTotal random tests = " << ITERATIONS_PER_THREAD * THREADS_PER_BLOCK * NUM_BLOCKS/1000000 << " Million\n";
+	std::cout << "\tTotal random tests = " << ITERATIONS_PER_THREAD * THREADS_PER_BLOCK * NUM_BLOCKS/(double)1000000 << " Million\n";
 
 	auto start = std::chrono::system_clock::now();
 
@@ -89,7 +89,7 @@ int main()
 		total += block_counters[i];
 	}
 
-	std::cout << "\tTotal random tests falling within quadrant = " << total/1000000 << " Million\n";
+	std::cout << "\tTotal random tests falling within quadrant = " << total/(double)1000000 << " Million\n";
 	std::cout << "Estimation of Pi = " << 4 * (double)total / (ITERATIONS_PER_THREAD * THREADS_PER_BLOCK * NUM_BLOCKS) << "\n";
 
 	auto end = std::chrono::system_clock::now();
